@@ -36,11 +36,10 @@ export default new Vuex.Store({
       if (index !== -1) {
         state.searchHistory.splice(index, 1)
       }
-      state.searchHistory.push(searchKey)
+      state.searchHistory.unshift(searchKey)
     },
     DeleteHistory (state, index) {
-      let len = state.searchHistory.length;
-      state.searchHistory.splice(len - 1 - index, 1);
+      state.searchHistory.splice(index, 1);
     },
     DeleteAllHistory (state) {
       state.searchHistory.splice(0);

@@ -40,7 +40,7 @@ export default {
   height: 50px;
   border-radius: 7px 7px 0 0;
   background-color: #ffffff;
-  box-shadow: #000000 0px 0px 10px 1px ;
+  box-shadow: #666666 0px 0px 5px 1px ;
   bottom: 0;
   left: 0;
   position: fixed;

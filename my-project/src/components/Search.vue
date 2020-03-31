@@ -1,21 +1,27 @@
 <template>
   <div>
-    <span @click="back"><mt-cell class="back" icon="back"></mt-cell></span>
-    <div class="search">
-      <input v-model="value" placeholder="搜索歌曲、MV、电台. . ." />
-      <button class="btn" :class="{ifCLick: ifClick}" ref="btn" @touchstart="handleStart" @touchend="handleEnd" @click="search">搜索</button>
+    <div class="search-header">
+      <span @click="back"><mt-cell class="back" icon="back"></mt-cell></span>
+      <div class="search">
+        <input v-model="value" placeholder="搜索歌曲、MV、电台. . ." />
+        <button class="btn" :class="{ifCLick: ifClick}" ref="btn" @touchstart="handleStart" @touchend="handleEnd" @click="search">搜索</button>
+      </div>
     </div>
+    <div style="height: 48px;"></div>
     <!-- 搜索结果 -->
     <div class="search-result" v-if="value.length">
       <ul>
-        <li v-for="(item, index) in filterResult" :key="index">{{item}}</li>
+        <li v-for="(item, index) in searchResult" :key="index" class="music-list">
+          <img class="musicNote-img" src="../assets/musicNote.png"/>
+          <span>{{item.name}}</span>
+        </li>
       </ul>
     </div>
     <!-- 热门搜索 -->
     <div class="hot-key-box" v-if="!value.length">
         <span class="title">热门搜索</span>
         <div class="hot-keys">
-          <div class="hot-key" v-for="(item, index) in hotKeys" :key="index">{{item.first}}</div>
+          <div class="hot-key" v-for="(item, index) in hotKeys" :key="index" @click="hotKeySearch(index)">{{item.first}}</div>
         </div>
     </div>
     <!-- 搜索历史 -->
@@ -25,10 +31,10 @@
         <span class="delete" @click="deleteAllHistory">删除记录</span>
         <div class="null" v-if="!searchHistory.length">暂无搜索记录</div>
         <div class="search-histories">
-          <div class="search-history" v-for="(item, index) in searchHistory" :key="index">
+          <div class="search-history" v-for="(item, index) in searchHistory" :key="index" @click="historySearch(index)">
             <img class="search-img" src="../assets/search-history.png"/>
             {{item}}
-            <img class="delete-img" src="../assets/delete-history.png" @click="deleteHistory(index)"/>
+            <img class="delete-img" src="../assets/delete-history.png" @click.stop="deleteHistory(index)"/>
           </div>
         </div>
       </div>
@@ -62,17 +68,18 @@ export default {
         'Peanut',
         'Other'
       ],
+      searchResult: [],
       hotKeys: []
     };
   },
   computed: {
-    filterResult() {
-      return this.defaultResult.filter(item => new RegExp(this.value, 'i').test(item));
-    },
+    // filterResult() {
+    //   return this.defaultResult.filter(item => new RegExp(this.value, 'i').test(item));
+    // },
     searchHistory () {
       let history = [];
       history.push(...this.$store.state.searchHistory);
-      return history.reverse();
+      return history
     }
     
   },
@@ -106,10 +113,28 @@ export default {
           this.$store.dispatch('saveHistory', searchKey)
           this.$api.musicSearch({keywords: this.value}).then(res => {
             if(res.code === 200) {
-
+              this.searchResult = res.result.songs
             }
           })
       }
+    },
+    hotKeySearch(index) {
+      this.value = this.hotKeys[index].first
+      this.$api.musicSearch({keywords: this.value}).then(res => {
+        if(res.code === 200) {
+          this.searchResult = res.result.songs
+        }
+      })
+      this.$store.dispatch('saveHistory', this.value)
+    },
+    historySearch(index) {
+      this.value = this.$store.state.searchHistory[index]
+      this.$api.musicSearch({keywords: this.value}).then(res => {
+        if(res.code === 200) {
+          this.searchResult = res.result.songs
+        }
+      })
+      this.$store.dispatch('saveHistory', this.value)
     },
     deleteHistory(index) {
       this.$store.dispatch('deleteHistory', index)
@@ -122,6 +147,11 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.search-header{
+  position: fixed;
+  background-color: #ffffff;
+  width: 100%;
+}
 .back{
   display: inline-block;
   position: static;
@@ -152,7 +182,7 @@ export default {
   border-radius: 5px;
 }
 .ifCLick{
-  background-color: #62d3a6;
+  background-color: #1afa29;
 }
 .search-result ul{
   padding: 0;
@@ -216,6 +246,28 @@ export default {
   color: #333333;
   padding: 2px;
   border-bottom: solid 1px #dddddd;
+}
+.musicNote-img{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  /* top: 8px; */
+}
+.music-list{
+  padding: 0 10px;
+  border-bottom: solid 1px #dddddd;
+  padding-bottom: 5px;
+  height: 40px;
+  line-height: 45px;
+  /* background-color: #eeeeee; */
+  background-color: #bbbbbb;
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* display: -webkit-box; */
+  /* -webkit-line-clamp: 1; */
+  white-space: nowrap;
+  /* -webkit-box-orient: vertical; */
 }
 .search-img{
   display: inline-block;
