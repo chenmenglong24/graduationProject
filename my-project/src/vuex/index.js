@@ -32,12 +32,11 @@ export default new Vuex.Store({
   mutations: {
     SaveHistory (state, searchKey) {
       let index = state.searchHistory.indexOf(searchKey);
-      // console.log(index)
+      // 有过相同的搜索记录的话，把该搜索记录移到最前
       if (index !== -1) {
         state.searchHistory.splice(index, 1)
       }
       state.searchHistory.push(searchKey)
-      // console.log(state.searchHistory)
     },
     DeleteHistory (state, index) {
       let len = state.searchHistory.length;

@@ -24,13 +24,13 @@
 export default {
   data () {
     return {
-      msg: '我是TM的侧边栏组件',
+      // msg: '我是TM的侧边栏组件',
       hide: true
     }
   },
   methods: {
     showSide () {
-      this.hide = !this.hide
+      this.hide = false
     }
   }
 }

@@ -1,33 +1,50 @@
-import Axios from 'axios';
+import axios from 'axios'
+import { Toast } from 'mint-ui';
 
-// let data  = []
-// function getData () {
-//   let data = []
-//   var dataSource = 'https://www.easy-mock.com/mock/5ca45824c4e9a575b66b62c9/example/qingtingyingyu';
-//   Axios.get(dataSource).then((response) => {
-//     // console.log(response);
-//     data.push(response.data.data);
-//   }).catch((error) => {
-//     console.log(error);
-//   })
-// }
+axios.defaults.timeout = 10000
+axios.defaults.baseURL = 'http://localhost:3000'
 
-let data = []
-function getData () {
+// axios配置
+axios.interceptors.response.use((res) => {
+  if(res.data.code !== 200) {
+    Toast({
+      message: '网络异常',
+      position: 'middle',
+      duration: 1000
+    })
+    return Promise.reject(res)
+  }
+  return res
+}, (error) => {
+  Toast({
+    message: '网络异常',
+    position: 'middle',
+    duration: 1000
+  })
+  return Promise.reject(error)
+})
+
+export function dataGet(url, param) {
   return new Promise((resolve, reject) => {
-    var dataSource = 'https://www.easy-mock.com/mock/5ca45824c4e9a575b66b62c9/example/qingtingyingyu';
-    Axios.get(dataSource)
-    .then((response) => {
-        resolve(response.data.data);
-        data.push(...response.data.data)
-      }, err => {
-        reject(err)
-      })
-    .catch((error) => {
-      reject(error);
+    axios.get(url, {
+      params: param
+    }).then(response => {
+      resolve(response.data)
+    }, err => {
+      reject(err)
+    }).catch(error => {
+      reject(error)
     })
   })
 }
-getData();
-// console.log(data)
-export default data;
+
+export default {
+  // 热搜
+  hotSearchKey() {
+    return dataGet('/search/hot')
+  },
+  // 歌曲搜索
+  musicSearch(params) {
+    return dataGet('/search', params)
+  }
+}

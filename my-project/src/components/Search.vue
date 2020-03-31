@@ -2,7 +2,7 @@
   <div>
     <span @click="back"><mt-cell class="back" icon="back"></mt-cell></span>
     <div class="search">
-      <input v-model="value" :result="filterResult" placeholder="搜索教材、课程、资料. . ." />
+      <input v-model="value" placeholder="搜索歌曲、MV、电台. . ." />
       <button class="btn" :class="{ifCLick: ifClick}" ref="btn" @touchstart="handleStart" @touchend="handleEnd" @click="search">搜索</button>
     </div>
     <!-- 搜索结果 -->
@@ -15,7 +15,7 @@
     <div class="hot-key-box" v-if="!value.length">
         <span class="title">热门搜索</span>
         <div class="hot-keys">
-          <div class="hot-key" v-for="(item, index) in hotKeys" :key="index">{{item}}</div>
+          <div class="hot-key" v-for="(item, index) in hotKeys" :key="index">{{item.first}}</div>
         </div>
     </div>
     <!-- 搜索历史 -->
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { Toast } from 'mint-ui';
 export default {
   name: 'page-search',
   data() {
@@ -61,12 +62,7 @@ export default {
         'Peanut',
         'Other'
       ],
-      hotKeys: [
-        '雅思', '出国', '沪教牛津版英语', 'BBC', '演讲', '心理健康', '语法', '音乐', 'The Big Bang Theory', '教学'
-      ],
-      // searchHistory: [
-      //   '四六级', 'kobe', 'jay'
-      // ]
+      hotKeys: []
     };
   },
   computed: {
@@ -80,30 +76,45 @@ export default {
     }
     
   },
+  created() {
+    // 获取热搜
+    this.$api.hotSearchKey().then(res => {
+      if(res.code === 200) {
+        this.hotKeys = res.result.hots
+      }
+    })
+  },
   methods: {
-    back () {
+    back() {
       this.$router.go(-1);
     },
-    handleStart () {
+    handleStart() {
       this.ifClick = true;
     },
-    handleEnd () {
+    handleEnd() {
       this.ifClick = false;
     },
-    search () {
-      // console.log(1);
-      if (this.value.replace(/(^\s*)|(\s*$)/g, "") =="") {
-        console.log('toast: 请输入内容')
+    search() {
+      if(this.value.replace(/(^\s*)|(\s*$)/g, "") =="") {
+        Toast({
+          message: '请输入内容',
+          position: 'top',
+          duration: 1000
+        })
         } else {          
           let searchKey = this.value
           this.$store.dispatch('saveHistory', searchKey)
+          this.$api.musicSearch({keywords: this.value}).then(res => {
+            if(res.code === 200) {
+
+            }
+          })
       }
     },
-    deleteHistory (index) {
-      // console.log(1);
+    deleteHistory(index) {
       this.$store.dispatch('deleteHistory', index)
     },
-    deleteAllHistory () {
+    deleteAllHistory() {
       this.$store.dispatch('deleteAllHistory');
     }
   }
@@ -141,7 +152,7 @@ export default {
   border-radius: 5px;
 }
 .ifCLick{
-  background-color: #999999;
+  background-color: #62d3a6;
 }
 .search-result ul{
   padding: 0;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="hide" v-if="hide" @click="clearHide"></div>
+    <div class="hide" v-if="cover" @click="clearHide"></div>
     <v-sidebar ref="showside"></v-sidebar>
     <div class="header">
       <mt-cell class="more">
@@ -8,7 +8,7 @@
       </mt-cell>
       <div class="search">
         <router-link tag="span" to="/search">
-          <span>搜索教材、课程、资料. . .</span>
+          <span>搜索歌曲、MV、电台. . .</span>
         </router-link>
       </div>
     </div>
@@ -30,8 +30,8 @@ import Sidebar from './Sidebar'
 export default {
   data () {
     return {
-      msg: '我是首页的头部',
-      hide: false,
+      // msg: '我是首页的头部',
+      cover: false,
       current: '1'
     }
   },
@@ -41,11 +41,11 @@ export default {
   },
   methods: {
     showside () {
-      this.hide = true
+      this.cover = true
       this.$refs.showside.showSide()
     },
     clearHide () {
-      this.hide = false
+      this.cover = false
       this.$refs.showside.hide = true
     },
     select (e) {
@@ -91,7 +91,7 @@ export default {
   justify-content: space-between;
 }
 .navigate{
-  color: #666666;
+  color: #888888;
   font-size: 20px;
   font-weight: 550;
   letter-spacing: 3px;
@@ -105,7 +105,7 @@ export default {
   display: block;
   position: relative;
   top: 5px;
-  left: 6px;
+  left: 7px;
   width: 30px;
   height: 4px;
   background-color: #1afa29;
