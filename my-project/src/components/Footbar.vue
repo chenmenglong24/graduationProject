@@ -5,7 +5,7 @@
       <img ref="btn" class="switch" src="../assets/pause.png" @click="playPause" @click.stop=""/>
     </div>
     <audio id="audio" 
-      src="https://audio.beingfine.cn/ListenData/267103271/609904395.mp3" 
+      :src="playingSong.url" 
       >
     </audio>
   </div>
@@ -15,7 +15,7 @@
 export default {
   data () {
     return {
-      msg: '我是底部播放栏吖'
+      playingSong: {}
     }
   },
   methods: {

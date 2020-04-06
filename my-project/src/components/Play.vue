@@ -3,6 +3,10 @@
     <div class="play-box">
       <span @click="back"><mt-cell class="back" icon="back"></mt-cell></span>
       {{msg}}
+      <audio id="audio" 
+        :src="playingSong.url" 
+        >
+      </audio>
       <div class="play-bar">
       播放页面的footbar
       </div>
@@ -15,8 +19,20 @@ export default {
   data () {
     return {
       msg: '我是播放页面',
-      see: true
+      see: true,
+      playingSong: {}
     }
+  },
+  created() {
+    this.playingSong = this.$store.state.playingSong
+    var audio = document.getElementById('audio')
+    // if (audio.paused) {
+        audio.play();
+        // btn.src = "/static/play.png";
+      // } else {
+        // audio.pause();
+        // btn.src = "/static/pause.png";
+      // }
   },
   methods: {
     back () {
@@ -30,9 +46,9 @@ export default {
 </script>
 
 <style scoped>
-.play-box{
+/* .play-box{
   
-}
+} */
 .play-bar{
   width: 100%;
   height: 50px;

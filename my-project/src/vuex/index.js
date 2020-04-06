@@ -10,7 +10,8 @@ export default new Vuex.Store({
     searchHistory: [],
     mySubscribe: [],
     myCollect: [],
-    myDownload: []
+    myDownload: [],
+    playingSong: {}
   },
   actions: {
     saveHistory ({ commit }, searchKey) {
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     },
     delMySubscribe ({ commit }, index) {
       commit('DelMySubscribe', index)
+    },
+    playingSong ({ commit }, song) {
+      commit('PlayingSong', song)
     }
   },
   mutations: {
@@ -67,6 +71,9 @@ export default new Vuex.Store({
       item.isSubscribe = false;
       console.log(item)
       state.mySubscribe.splice(index, 1);
+    },
+    PlayingSong (state, song) {
+      state.playingSong = song
     }
   },
   getters: {

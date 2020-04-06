@@ -11,7 +11,7 @@
     <!-- 搜索结果 -->
     <div class="search-result" v-if="value.length">
       <ul>
-        <li v-for="(item, index) in searchResult" :key="index" class="music-list">
+        <li v-for="(item, index) in searchResult" :key="index" class="music-list" @click="getMusicUrl(index)">
           <img class="musicNote-img" src="../assets/musicNote.png"/>
           <span>{{item.name}}</span>
         </li>
@@ -69,7 +69,8 @@ export default {
         'Other'
       ],
       searchResult: [],
-      hotKeys: []
+      hotKeys: [],
+      // playingSong: {}
     };
   },
   computed: {
@@ -117,6 +118,16 @@ export default {
             }
           })
       }
+    },
+    getMusicUrl(index) {
+      let songId = this.searchResult[index].id
+      this.$api.musicUrl({id: songId}).then(res => {
+        if(res.code === 200) {
+          this.$store.dispatch('playingSong', res.data[0])
+          // console.log(this.$store.state.playingSong)
+          this.$router.push('/Play')
+        }
+      })
     },
     hotKeySearch(index) {
       this.value = this.hotKeys[index].first
@@ -207,7 +218,7 @@ export default {
   border-radius: 15px;
 }
 .search-history-box{
-  margin: 10px;
+  margin: 30px 10px 10px 10px;
 }
 .title{
   font-size: 13px;

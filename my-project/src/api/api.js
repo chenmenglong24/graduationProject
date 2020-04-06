@@ -46,5 +46,9 @@ export default {
   // 歌曲搜索
   musicSearch(params) {
     return dataGet('/search', params)
+  },
+  // 获取音乐url
+  musicUrl(params) {
+    return dataGet('/song/url', params)
   }
 }
