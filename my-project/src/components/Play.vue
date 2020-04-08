@@ -2,7 +2,18 @@
   <!-- <transition name="play-page"> -->
     <div class="play-box">
       <span @click="back"><mt-cell class="back" icon="back"></mt-cell></span>
-      {{msg}}
+        <div class="cover">
+          <div style="padding-top: 20px; color: #666666; text-shadow:1px 5px 24px #000">
+            <span>歌曲:</span>
+            <span>{{playingSong.songName}}</span>
+          </div>
+          <div style="padding-top: 10px; color: #666666; text-shadow:1px 5px 24px #000">
+            <span>作者:</span>
+            <!-- <span v-for="(name, index) in playingSong.artists" :key="index">{{name}}</span> -->
+            <span>{{playingSong.artists.join('/')}}</span>
+          </div>
+          <img :src="playingSong.cover" class="cover-img" alt="">
+        </div>
       <div class="play-bar">
         <div class="audio-box">
           <div class="switch-box">
@@ -25,12 +36,14 @@ export default {
       msg: '我是播放页面',
       see: true,
       play: true,
-      playingSong: {}
+      playingSong: {},
+      // cover: '',
+      size: 0
     }
   },
   created() {
     this.playingSong = this.$store.state.playingSong
-    // console.log(this.playingSong.url)
+    console.log(this.playingSong)
   },
   mounted() {
     let audio = document.getElementById('audio')
@@ -113,5 +126,27 @@ export default {
   position: relative;
   left: 50%;
   transform: translate(-43%, 15px);
+}
+.cover{
+  text-align: center;
+}
+.cover-img{
+  width: 180px;
+  height: 180px;
+  position: relative;
+  top: 100px;
+  border-radius: 50%;
+  border: solid #ffffff 40px;
+  box-shadow: #666666 0px 0px 5px 1px ;
+  animation: rotate 10s linear infinite;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

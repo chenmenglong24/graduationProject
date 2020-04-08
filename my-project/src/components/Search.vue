@@ -121,9 +121,16 @@ export default {
     },
     getMusicUrl(index) {
       let songId = this.searchResult[index].id
+      let songCover = this.searchResult[index].album.artist.img1v1Url
+      let artists = this.searchResult[index].artists
+      let artistsArr = artists.map(item => {
+        return item.name
+      })
+      let songName = this.searchResult[index].name
       this.$api.musicUrl({id: songId}).then(res => {
         if(res.code === 200) {
-          this.$store.dispatch('playingSong', res.data[0])
+          let songInfo = Object.assign({}, {'cover': songCover}, {'artists': artistsArr}, {'songName': songName}, res.data[0])
+          this.$store.dispatch('playingSong', songInfo)
           // console.log(this.$store.state.playingSong)
           this.$router.push('/Play')
         }
