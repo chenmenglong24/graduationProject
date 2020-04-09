@@ -187,7 +187,7 @@ export default {
   font-size: 16px;
 }
 .btn{
-  margin-left: 10px;
+  margin-left: 24px;
   border: none;
   outline: none;
   color: #ffffff;
