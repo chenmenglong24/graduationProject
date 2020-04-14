@@ -278,7 +278,7 @@ export default {
   height: 40px;
   line-height: 45px;
   /* background-color: #eeeeee; */
-  background-color: #bbbbbb;
+  background-color: #cccccc;
   color: #ffffff;
   overflow: hidden;
   text-overflow: ellipsis;

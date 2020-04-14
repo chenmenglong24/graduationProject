@@ -3,19 +3,24 @@
     <div class="play-box">
       <span @click="back"><mt-cell class="back" icon="back"></mt-cell></span>
       <div class="cover">
-        <div style="padding-top: 20px; color: #666666; text-shadow:1px 5px 24px #000">
+        <div style="padding-top: 20px; color: #ffffff; text-shadow:1px 5px 24px #000">
           <span>歌曲:</span>
           <span>{{playingSong.songName}}</span>
         </div>
-        <div style="padding-top: 10px; color: #666666; text-shadow:1px 5px 24px #000">
+        <div style="padding-top: 10px; color: #ffffff; text-shadow:1px 5px 24px #000">
           <span>作者:</span>
           <!-- <span v-for="(name, index) in playingSong.artists" :key="index">{{name}}</span> -->
           <span>{{playingSong.artists.join('/')}}</span>
         </div>
         <img :src="playingSong.cover" class="cover-img" alt="" id="cover">
         <div class="time">
-          <span>00.00</span>
-          <span>{{size}}</span>
+          <span class="current-time">{{format(currentTime)}}</span>
+          <div class="progress-bar">
+            <div class="progress-ball" :style="{width: (currentTime / size)*100 + '%'}">
+              <div style="width:6px;height:6px;background-color:#1afa29;position:relative;left:100%;bottom:1.5px;border-radius:6px;"></div>
+            </div>
+          </div>
+          <span class="size">{{sizeStr}}</span>
         </div>
       </div>
       <div class="play-bar">
@@ -27,6 +32,8 @@
             <img ref="playBtn" :class="[play ? 'switchPlay' : 'switchPause']" id="switch" src="../assets/play.png" @click="playPause"/>
             <audio id="audio" 
               :src="playingSong.url" 
+              @timeupdate="timeGoes"
+              @ended="songEnd"
               >
             </audio>
           </div>
@@ -48,7 +55,9 @@ export default {
       play: true,
       playingSong: {},
       // cover: '',
-      size: ''
+      currentTime: '0.00',
+      sizeStr: '0.00',
+      size: 0
     }
   },
   created() {
@@ -56,13 +65,15 @@ export default {
     console.log(this.playingSong)
   },
   mounted() {
+    let that = this
     let audio = document.getElementById('audio')
     audio.play()
     console.log('页面加载进来时audio.paused：',audio.paused)
     audio.oncanplay = function () {
-      // console.log(audio.duration)
-      this.size = String(audio.duration/60 | 0) + '.' + String(audio.duration%60 | 0)
-      console.log(this.size)
+      that.size = audio.duration
+      that.sizeStr = String(audio.duration/60 | 0) + ':' + String(audio.duration%60 | 0)
+      console.log(that.sizeStr)
+      console.log(that.size)
     }
   },
   methods: {
@@ -72,10 +83,28 @@ export default {
     show () {
       this.see = !this.see
     },
+    format(seconds) {
+      // if(seconds < this.size) {
+        let minute = Number(seconds)/60 | 0
+        let second = Number(seconds)%60 | 0
+        let sec = second < 10 ? '0' + second : second
+        return `${minute}:${sec}`
+      // }
+    },
+    timeGoes(e) {
+      this.currentTime = e.target.currentTime
+    },
+    songEnd() {
+      this.play = false
+      let cover = document.getElementById('cover')
+      let playBtn = this.$refs.playBtn
+      playBtn.src = "/static/pause.png"
+      cover.style=cover.style.cssText+"animation-play-state: paused;"
+    },
     playPause () {
-      let audio = document.getElementById('audio');
-      let cover = document.getElementById('cover');
-      let playBtn = this.$refs.playBtn;
+      let audio = document.getElementById('audio')
+      let cover = document.getElementById('cover')
+      let playBtn = this.$refs.playBtn
       if (audio.paused) {
         audio.play();
         console.log('点击播放按钮时audio.paused：',audio.paused)
@@ -90,14 +119,15 @@ export default {
         playBtn.src = "/static/pause.png"
         cover.style=cover.style.cssText+"animation-play-state: paused;"
       }
-    }
+    },
+    
   }
 }
 </script>
 
 <style scoped>
 .play-box{
-  background-color: #eeeeee;
+  background-color: #dddddd;
   height: 100vh;
 }
 .play-bar{
@@ -179,11 +209,37 @@ export default {
   position: relative;
   top: 27vh;
 }
-.time span{
-  margin: 0 20px;
+.current-time{
+  margin: 0 10px 0 20px;
   color: #ffffff;
   text-shadow:1px 1px 8px #000
 }
+.size{
+  margin: 0 20px 0 10px;
+  color: #ffffff;
+  text-shadow:1px 1px 8px #000
+}
+.progress-bar{
+  margin-top: 10px;
+  width: 100%;
+  height: 3px;
+  background-color: #bbbbbb;
+  border-radius: 5px;
+  /* overflow: hidden; */
+}
+.progress-ball{
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+/* .progress-ball:after{
+  content: "";
+  position: relative;
+  right: 0;
+  height: 5px;
+  width: 5px;
+  background-color: #000000;
+} */
 .cover-img{
   width: 180px;
   height: 180px;
@@ -191,7 +247,7 @@ export default {
   top: 100px;
   border-radius: 50%;
   border: solid #ffffff 40px;
-  box-shadow: #666666 0px 0px 5px 1px ;
+  box-shadow: #666666 0px 0px 10px 3px ;
   animation: rotate 10s linear infinite;
   animation-play-state: running;
 }
