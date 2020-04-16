@@ -50,5 +50,9 @@ export default {
   // 获取音乐url
   musicUrl(params) {
     return dataGet('/song/url', params)
+  },
+  // 获取歌词
+  musicLyric(params) {
+    return dataGet('/lyric', params)
   }
 }

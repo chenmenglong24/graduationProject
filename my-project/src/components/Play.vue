@@ -13,6 +13,7 @@
           <span>{{playingSong.artists.join('/')}}</span>
         </div>
         <img :src="playingSong.cover" class="cover-img" alt="" id="cover">
+        <div class="lyric" style="display:flex;">{{playingSong.lyric}}</div>
         <div class="time">
           <span class="current-time">{{format(currentTime)}}</span>
           <div class="progress-bar">
@@ -259,5 +260,16 @@ export default {
   100% {
     transform: rotate(360deg);
   }
+}
+.lyric{
+  position: fixed;
+  margin: 130px 35px;
+  top: 0;
+  height: 60%;
+  overflow-y: scroll;
+  z-index: 0;
+}
+.lyric::-webkit-scrollbar{
+  width: 0
 }
 </style>
