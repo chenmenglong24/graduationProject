@@ -138,12 +138,12 @@ export default {
           songInfo = Object.assign(songInfo, res.data[0])
           this.$store.dispatch('playingSong', songInfo)
           // 获取歌词
-          this.$api.musicLyric({id: songId}).then(res => {
-            if(res.code === 200) {
-              songInfo = Object.assign(songInfo, {'lyric': res.lrc.lyric})
-              this.$store.dispatch('playingSong', songInfo)
-            }
-          })
+          // this.$api.musicLyric({id: songId}).then(res => {
+          //   if(res.code === 200) {
+          //     songInfo = Object.assign(songInfo, {'lyric': res.lrc.lyric})
+          //     this.$store.dispatch('playingSong', songInfo)
+          //   }
+          // })
           // console.log(this.$store.state.playingSong)
           this.$router.push('/Play')
         }

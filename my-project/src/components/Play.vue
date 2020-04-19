@@ -2,7 +2,7 @@
   <!-- <transition name="play-page"> -->
     <div class="play-box">
       <span @click="back"><mt-cell class="back" icon="back"></mt-cell></span>
-      <div class="cover">
+      <div class="cover" @click="showLyric">
         <div style="padding-top: 20px; color: #ffffff; text-shadow:1px 5px 24px #000">
           <span>歌曲:</span>
           <span>{{playingSong.songName}}</span>
@@ -12,8 +12,8 @@
           <!-- <span v-for="(name, index) in playingSong.artists" :key="index">{{name}}</span> -->
           <span>{{playingSong.artists.join('/')}}</span>
         </div>
-        <img :src="playingSong.cover" class="cover-img" alt="" id="cover">
-        <div class="lyric" style="display:flex;">{{playingSong.lyric}}</div>
+        <img :src="playingSong.cover" class="cover-img" alt="" id="cover" >
+        <div class="lyric" id="lyric" style="display:flex;" v-html="playingSong.lyric" @click.stop="hideLyric"></div>
         <div class="time">
           <span class="current-time">{{format(currentTime)}}</span>
           <div class="progress-bar">
@@ -58,12 +58,14 @@ export default {
       // cover: '',
       currentTime: '0.00',
       sizeStr: '0.00',
-      size: 0
+      size: 0,
+      lyric: ''
     }
   },
   created() {
     this.playingSong = this.$store.state.playingSong
     console.log(this.playingSong)
+    this.getLyric()
   },
   mounted() {
     let that = this
@@ -81,8 +83,44 @@ export default {
     back () {
       this.$router.go(-1);
     },
+    getLyric() {
+      this.$api.musicLyric({id: this.playingSong.id}).then(res => {
+        if(res.code === 200) {
+          // songInfo = Object.assign(songInfo, {'lyric': res.lrc.lyric})
+          // this.$store.dispatch('playingSong', songInfo)
+          this.lyric = res.lrc.lyric
+          this.formatLyric(this.lyric)
+        }
+      })
+    },
+    formatLyric(lyric) {
+      let flag = false
+      let lyricArr = []
+      for(let i = 0; i < this.lyric.length; i++) {
+        if(this.lyric[i] === '[') {
+          flag = false
+        }
+        if(flag) {
+          lyricArr.push(this.lyric[i])
+        }
+        if(this.lyric[i] === ']') {
+          flag = true
+        }
+      }
+      console.log(lyricArr.join(''))
+      this.playingSong.lyric = lyricArr.join('').replace(/\n/g,"<br/>")
+    },
     show () {
       this.see = !this.see
+    },
+    hideLyric() {
+      let lyricBox = document.getElementById('lyric')
+      // console.log(lyricBox.style.zIndex)
+      lyric.style.zIndex = -1
+    },
+    showLyric() {
+      let lyricBox = document.getElementById('lyric')
+      lyric.style.zIndex = 99
     },
     format(seconds) {
       // if(seconds < this.size) {
@@ -203,6 +241,7 @@ export default {
 }
 .cover{
   text-align: center;
+  height: 75%;
 }
 .time{
   display: flex;
@@ -267,7 +306,13 @@ export default {
   top: 0;
   height: 60%;
   overflow-y: scroll;
-  z-index: 0;
+  z-index: -1;
+  color: #ffffff;
+  font-size: 17px;
+  line-height: 30px;
+  letter-spacing: 2px;
+  background-color: rgba(220,220,220, 0.8);
+  text-shadow: rgb(0, 0, 0) 2px 3px 30px;
 }
 .lyric::-webkit-scrollbar{
   width: 0
