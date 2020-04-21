@@ -13,7 +13,18 @@
           <span>{{playingSong.artists.join('/')}}</span>
         </div>
         <img :src="playingSong.cover" class="cover-img" alt="" id="cover" >
+        <!-- 歌词 -->
         <div class="lyric" id="lyric" style="display:flex;" v-html="playingSong.lyric" @click.stop="hideLyric"></div>
+        <!-- 喜欢 -->
+        <div class="like">
+          <div class="like-img" v-if="!like">
+           <img src="../assets/unlike.png" @click.stop="doLike"/>
+          </div>
+          <div class="like-img" v-if="like">
+            <img src="../assets/like.png" @click.stop="doLike"/>
+          </div>
+        </div>
+        <!-- 进度条 -->
         <div class="time">
           <span class="current-time">{{format(currentTime)}}</span>
           <div class="progress-bar">
@@ -59,13 +70,18 @@ export default {
       currentTime: '0.00',
       sizeStr: '0.00',
       size: 0,
-      lyric: ''
+      lyric: '',
+      like: false
     }
   },
   created() {
     this.playingSong = this.$store.state.playingSong
     console.log(this.playingSong)
     this.getLyric()
+    let index = this.$store.state.likeSongsList.indexOf(this.playingSong.id)
+    if(index != -1) {
+      this.like = true
+    }
   },
   mounted() {
     let that = this
@@ -129,6 +145,17 @@ export default {
         let sec = second < 10 ? '0' + second : second
         return `${minute}:${sec}`
       // }
+    },
+    doLike() {
+      let id = this.playingSong.id
+      if(this.like) {
+        this.like = false
+        this.$store.dispatch('delMyLike', id)
+      } else {
+        this.like = true
+        this.$store.dispatch('addMyLike', id)
+      }
+      console.log(this.$store.state.likeSongsList)
     },
     timeGoes(e) {
       this.currentTime = e.target.currentTime
@@ -247,7 +274,7 @@ export default {
   display: flex;
   justify-content: space-between;
   position: relative;
-  top: 27vh;
+  top: 145px;
 }
 .current-time{
   margin: 0 10px 0 20px;
@@ -316,5 +343,26 @@ export default {
 }
 .lyric::-webkit-scrollbar{
   width: 0
+}
+.like{
+  position: relative;
+  height: 50px;
+  top: 105px;
+}
+.like-img{
+  width: 50px;
+  height: 50px;
+  position: relative;
+  left: 65px;
+  box-shadow: #999999 0px 0px 10px 4px;
+  border-radius: 50%;
+  background-color: #fefefe;
+}
+.like img{
+  width: 40px;
+  height: 40px;
+  position: relative;
+  top: 7px;
+  
 }
 </style>

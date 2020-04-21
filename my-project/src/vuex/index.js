@@ -11,7 +11,8 @@ export default new Vuex.Store({
     mySubscribe: [],
     myCollect: [],
     myDownload: [],
-    playingSong: {}
+    playingSong: {},
+    likeSongsList: []
   },
   actions: {
     saveHistory ({ commit }, searchKey) {
@@ -31,7 +32,13 @@ export default new Vuex.Store({
     },
     playingSong ({ commit }, song) {
       commit('PlayingSong', song)
-    }
+    },
+    addMyLike ({ commit }, id) {
+      commit('AddMyLike', id)
+    },
+    delMyLike ({ commit }, id) {
+      commit('DelMyLike', id)
+    },
   },
   mutations: {
     SaveHistory (state, searchKey) {
@@ -74,6 +81,13 @@ export default new Vuex.Store({
     },
     PlayingSong (state, song) {
       state.playingSong = song
+    },
+    AddMyLike(state, id) {
+      state.likeSongsList.unshift(id)
+    },
+    DelMyLike(state, id) {
+      let index = state.likeSongsList.indexOf(id)
+      state.likeSongsList.splice(index, 1)
     }
   },
   getters: {
