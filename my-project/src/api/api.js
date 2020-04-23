@@ -45,7 +45,11 @@ export default {
   },
   // 歌曲搜索
   musicSearch(params) {
-    return dataGet('/search', params)
+    return dataGet('/search?limit=60', params)
+  },
+  // 专辑内容，主要用来获取歌曲封面
+  album(params) {
+    return dataGet('/album', params)
   },
   // 获取音乐url
   musicUrl(params) {

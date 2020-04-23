@@ -121,7 +121,8 @@ export default {
     },
     getMusicUrl(index) {
       let songId = this.searchResult[index].id
-      let songCover = this.searchResult[index].album.artist.img1v1Url
+      // let songCover = this.searchResult[index].album.artist.img1v1Url
+      let albumId = this.searchResult[index].album.id
       let artists = this.searchResult[index].artists
       let artistsArr = artists.map(item => {
         return item.name
@@ -131,7 +132,8 @@ export default {
         if(res.code === 200) {
           // let songInfo = Object.assign({}, {'cover': songCover}, {'artists': artistsArr}, {'songName': songName}, res.data[0])
           let songInfo = {
-            'cover': songCover,
+            // 'cover': songCover,
+            'albumId': albumId,
             'artists': artistsArr,
             'songName': songName
           }

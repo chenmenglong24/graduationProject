@@ -12,7 +12,7 @@
           <!-- <span v-for="(name, index) in playingSong.artists" :key="index">{{name}}</span> -->
           <span>{{playingSong.artists.join('/')}}</span>
         </div>
-        <img :src="playingSong.cover" class="cover-img" alt="" id="cover" >
+        <img :src="cover" class="cover-img" alt="" id="cover" >
         <!-- 歌词 -->
         <div class="lyric" id="lyric" style="display:flex;" v-html="playingSong.lyric" @click.stop="hideLyric"></div>
         <!-- 喜欢 -->
@@ -66,7 +66,7 @@ export default {
       see: true,
       play: true,
       playingSong: {},
-      // cover: '',
+      cover: '',
       currentTime: '0.00',
       sizeStr: '0.00',
       size: 0,
@@ -77,6 +77,7 @@ export default {
   created() {
     this.playingSong = this.$store.state.playingSong
     console.log(this.playingSong)
+    this.getCover()
     this.getLyric()
     let index = this.$store.state.likeSongsList.indexOf(this.playingSong.id)
     if(index != -1) {
@@ -96,8 +97,15 @@ export default {
     }
   },
   methods: {
-    back () {
+    back() {
       this.$router.go(-1);
+    },
+    getCover() {
+      this.$api.album({id: this.playingSong.albumId}).then(res => {
+        if(res.code === 200) {
+          this.cover = res.album.blurPicUrl
+        } 
+      })
     },
     getLyric() {
       this.$api.musicLyric({id: this.playingSong.id}).then(res => {
@@ -123,7 +131,7 @@ export default {
           flag = true
         }
       }
-      console.log(lyricArr.join(''))
+      // console.log(lyricArr.join(''))
       this.playingSong.lyric = lyricArr.join('').replace(/\n/g,"<br/>")
     },
     show () {
@@ -315,7 +323,7 @@ export default {
   border-radius: 50%;
   border: solid #ffffff 40px;
   box-shadow: #666666 0px 0px 10px 3px ;
-  animation: rotate 10s linear infinite;
+  animation: rotate 20s linear infinite;
   animation-play-state: running;
 }
 @keyframes rotate {
@@ -362,7 +370,7 @@ export default {
   width: 40px;
   height: 40px;
   position: relative;
-  top: 7px;
+  top: 6.5px;
   
 }
 </style>
