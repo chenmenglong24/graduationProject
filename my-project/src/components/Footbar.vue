@@ -44,6 +44,7 @@ export default {
   bottom: 0;
   left: 0;
   position: fixed;
+  z-index: -1;
 }
 .img-box{
   margin: 6px 15px;

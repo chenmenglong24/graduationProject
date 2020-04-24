@@ -1,18 +1,21 @@
 <template>
   <div id="app">
     <router-view/>
-    <router-link tag="span" to="/play" v-if="$route.name !== 'Play'">
+    <!-- <router-link tag="span" to="/play" v-if="$route.name !== 'Play'" style="display: none;"> -->
       <v-footbar></v-footbar>
-    </router-link>
+    <!-- </router-link> -->
+    <play></play>
   </div>
 </template>
 
 <script>
 import Footbar from '@/components/Footbar'
+import Play from '@/components/Footbar'
 export default {
   name: 'App',
   components: {
-    'v-footbar': Footbar
+    'v-footbar': Footbar,
+    'play': Play
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <!-- <transition name="play-page"> -->
-    <div class="play-box">
+    <div class="play-box" id="playPage">
       <span @click="back"><mt-cell class="back" icon="back"></mt-cell></span>
       <div class="cover" @click="showLyric">
         <div style="padding-top: 20px; color: #ffffff; text-shadow:1px 5px 24px #000">
@@ -101,6 +101,8 @@ export default {
   methods: {
     back() {
       this.$router.go(-1);
+      // let playPage = document.getElementById('playPage')
+      // playPage.style.display = 'none'
     },
     getCover() {
       this.$api.album({id: this.playingSong.albumId}).then(res => {
@@ -203,8 +205,10 @@ export default {
 
 <style scoped>
 .play-box{
+  position: fixed;
   background-color: #dddddd;
   height: 100vh;
+  width: 100%;
 }
 .play-bar{
   width: 100%;
@@ -231,7 +235,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px;
+  /* margin: 20px; */
+  padding: 20px;
+  background-color: #666666;
 }
 .switch-box{
   width: 80px;
@@ -278,21 +284,22 @@ export default {
 }
 .cover{
   text-align: center;
-  height: 75%;
+  height: 77%;
+  background-color: #666666;
 }
 .time{
   display: flex;
   justify-content: space-between;
   position: relative;
-  top: 145px;
+  top: 150px;
 }
 .current-time{
-  margin: 0 10px 0 20px;
+  margin: 0 10px;
   color: #ffffff;
   text-shadow:1px 1px 8px #000
 }
 .size{
-  margin: 0 20px 0 10px;
+  margin: 0 10px;
   color: #ffffff;
   text-shadow:1px 1px 8px #000
 }
@@ -323,8 +330,8 @@ export default {
   position: relative;
   top: 100px;
   border-radius: 50%;
-  border: solid #ffffff 40px;
-  box-shadow: #666666 0px 0px 10px 3px ;
+  border: solid #fefefe 40px;
+  box-shadow: #aaaaaa 0px 0px 20px 3px ;
   animation: rotate 20s linear infinite;
   animation-play-state: running;
 }
@@ -349,7 +356,7 @@ export default {
   font-size: 17px;
   line-height: 30px;
   letter-spacing: 2px;
-  background-color: rgba(220,220,220, 0.8);
+  background-color: rgba(103,103,103, 0.9);
   text-shadow: rgb(0, 0, 0) 2px 3px 30px;
 }
 .lyric::-webkit-scrollbar{
