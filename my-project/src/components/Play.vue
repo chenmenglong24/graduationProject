@@ -14,7 +14,9 @@
         </div>
         <img :src="cover" class="cover-img" alt="" id="cover" >
         <!-- 歌词 -->
-        <div class="lyric" id="lyric" style="display:flex;" v-html="playingSong.lyric" @click.stop="hideLyric"></div>
+        <div class="lyric" id="lyric" style="display:flex;" @click.stop="hideLyric">
+          <div v-html="playingSong.lyric" class="lyric-font"></div>
+        </div>
         <!-- 喜欢 -->
         <div class="like">
           <div class="like-img" v-if="!like">
@@ -336,6 +338,7 @@ export default {
   }
 }
 .lyric{
+  width: 345px;
   position: fixed;
   margin: 130px 35px;
   top: 0;
@@ -371,6 +374,10 @@ export default {
   height: 40px;
   position: relative;
   top: 6.5px;
-  
+}
+.lyric-font{
+  position: relative;
+  left: 50%;
+  transform: translate(-50%)
 }
 </style>
