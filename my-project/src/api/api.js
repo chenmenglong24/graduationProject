@@ -58,5 +58,25 @@ export default {
   // 获取歌词
   musicLyric(params) {
     return dataGet('/lyric', params)
-  }
+  },
+  // 轮播图
+  banner(params) {
+    return dataGet('/banner', params)
+  },
+  // 热门歌手
+  topArtists(params) {
+    return dataGet('/top/artists', params)
+  },
+  // 热门歌单
+  topPlaylistHighquality(params) {
+    return dataGet('/top/playlist/highquality', params)
+  },
+  // 新碟上架
+  topAlbum(params) {
+    return dataGet('/top/album', params)
+  },
+  // 热门电台
+  djHot(params) {
+    return dataGet('/dj/hot', params)
+  },
 }

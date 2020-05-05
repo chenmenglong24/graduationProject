@@ -90,12 +90,16 @@ export default {
     let that = this
     let audio = document.getElementById('audio')
     audio.play()
-    console.log('页面加载进来时audio.paused：',audio.paused)
+    console.log('页面加载进来时audio.paused：', audio.paused)
     audio.oncanplay = function () {
       that.size = audio.duration
-      that.sizeStr = String(audio.duration/60 | 0) + ':' + String(audio.duration%60 | 0)
-      console.log(that.sizeStr)
+      if(String(audio.duration%60 | 0).length === 1) {
+        that.sizeStr = String(audio.duration/60 | 0) + ':' + '0' + String(audio.duration%60 | 0)
+      } else {
+        that.sizeStr = String(audio.duration/60 | 0) + ':' + String(audio.duration%60 | 0)
+      }
       console.log(that.size)
+      console.log(that.sizeStr)
     }
   },
   methods: {
@@ -284,7 +288,7 @@ export default {
 }
 .cover{
   text-align: center;
-  height: 77%;
+  height: 78%;
   background-color: #666666;
 }
 .time{
@@ -357,7 +361,7 @@ export default {
   line-height: 30px;
   letter-spacing: 2px;
   background-color: rgba(103,103,103, 0.9);
-  text-shadow: rgb(0, 0, 0) 2px 3px 30px;
+  text-shadow: rgb(255, 255, 255) 1px 1px 30px;
 }
 .lyric::-webkit-scrollbar{
   width: 0

@@ -2,7 +2,7 @@
   <div>
     <div class="swipe-box">
       <mt-swipe :auto="3000">
-        <mt-swipe-item v-for="(item, index) in dataSrc" :key="index" v-if="index<5" @click.native="toDetail(index)"><img :src="item.cover"/></mt-swipe-item>
+        <mt-swipe-item v-for="(item, index) in bannerList" :key="index" @click.native="toDetail(index)"><img :src="item.pic"/></mt-swipe-item>
         <!-- <mt-swipe-item><img src="@/assets/swipe.jpg"/></mt-swipe-item>
         <mt-swipe-item><img src="@/assets/swipe.jpg"/></mt-swipe-item> -->
       </mt-swipe>
@@ -11,51 +11,15 @@
       <div class="icon"><img src="@/assets/iconbar/recommend.png"/><span>推荐</span></div>
       <div class="icon"><img src="@/assets/iconbar/hotkey.png"/><span>热门</span></div>
       <div class="icon"><img src="@/assets/iconbar/special.png"/><span>专题</span></div>
-      <div class="icon"><img src="@/assets/iconbar/detail.png"/><span>精讲</span></div>
+      <div class="icon"><img src="@/assets/iconbar/detail.png"/><span>精选</span></div>
     </div>
     <div class="update-box">
-      <div class="today-update">— 今日更新 —</div>
+      <div class="today-update">— 热门歌手 —</div>
       <div class="update">
-        <div class="update-item" v-for="(item, index) in dataSrc" :key="index" @click="toDetail(index)">
-          <img :src="item.cover"/>
-          <span>{{item.title}}</span>
+        <div class="update-item" v-for="(item, index) in topArtistsList" :key="index" @click="toDetail(index)">
+          <img :src="item.picUrl"/>
+          <span>{{item.name}}</span>
         </div>
-        <!-- <div class="update-item">
-          <img src="@/assets/swipe.jpg"/>
-          <span>标</span>
-        </div>
-        <div class="update-item">
-          <img src="@/assets/swipe.jpg"/>
-          <span>标题</span>
-        </div>
-        <div class="update-item">
-          <img src="@/assets/swipe.jpg"/>
-          <span>标题标</span>
-        </div>
-        <div class="update-item">
-          <img src="@/assets/swipe.jpg"/>
-          <span>标题标题</span>
-        </div>
-        <div class="update-item">
-          <img src="@/assets/swipe.jpg"/>
-          <span>标题标题标题</span>
-        </div>
-        <div class="update-item">
-          <img src="@/assets/swipe.jpg"/>
-          <span>标题标题标题标题标题标题标题标题标题标题</span>
-        </div>
-        <div class="update-item">
-          <img src="@/assets/swipe.jpg"/>
-          <span>标题标题标题标题标题标题标题标题标题标题</span>
-        </div>
-        <div class="update-item">
-          <img src="@/assets/swipe.jpg"/>
-          <span>标题标题标题标题标题标题标题标题标题标题</span>
-        </div>
-        <div class="update-item">
-          <img src="@/assets/swipe.jpg"/>
-          <span>标题标题标题标题标题标题标题标题标题标题</span>
-        </div> -->
         <div class="update-item">
           <div class="update-more">更多</div>
         </div>
@@ -63,46 +27,43 @@
     </div>
     <div class="sorts-box">
       <div class="title-box">
-        <span class="title">新进教材</span>
+        <span class="title">精品歌单</span>
         <span class="more">更多</span>
       </div>
       <div class="items">
         <!-- <router-link to='/detail' tag="span" > -->
-          <div class="item" v-for="(item, index) in dataSrc" :key="index" v-if="index<3" @click="toDetail(index)">
-            <img :src="item.cover" />
-            <span>{{item.title}}</span>
+          <div class="item" v-for="(item, index) in topPlaylist" :key="index" @click="toDetail(index)">
+            <img :src="item.coverImgUrl" />
+            <span>{{item.name}}</span>
           </div>
         <!-- </router-link> -->
-        <!-- <div class="item">
-          <img src="@/assets/swipe.jpg" />
-          <span>标题</span>
-        </div>
-        <div class="item">
-          <img src="@/assets/swipe.jpg" />
-          <span>标题标题标题标题标题标题标题标题</span>
-        </div> -->
       </div>
     </div>
     <div class="sorts-box">
       <div class="title-box">
-        <span class="title">六级考试</span>
+        <span class="title">新碟上架</span>
         <span class="more">更多</span>
       </div>
       <div class="items">
-        <div class="item" v-for="(item, index) in dataSrc" :key="index" v-if="index>dataSrc.length-1-3" @click="toDetail(index)">
-          <img :src="item.cover" />
-          <span>{{item.title}}</span>
+        <div class="item" v-for="(item, index) in topAlbumList" :key="index" @click="toDetail(index)">
+          <img :src="item.blurPicUrl" />
+          <span class="top-album-name">{{item.name}}</span>
         </div>
-        <!-- <div class="item">
-          <img src="@/assets/swipe.jpg" />
-          <span>标题标</span>
-        </div>
-        <div class="item">
-          <img src="@/assets/swipe.jpg" />
-          <span>标题标题标题标题</span>
-        </div> -->
       </div>
     </div>
+    <div class="sorts-box">
+      <div class="title-box">
+        <span class="title">热门电台</span>
+        <span class="more">更多</span>
+      </div>
+      <div class="items">
+        <div class="item" v-for="(item, index) in djHotList" :key="index" @click="toDetail(index)">
+          <img :src="item.picUrl" />
+          <span class="top-album-name">{{item.name+'('+item.rcmdtext+')'}}</span>
+        </div>
+      </div>
+    </div>
+    <div style="height: 50px;"></div>
   </div>
 </template>
 <script>
@@ -110,7 +71,12 @@ import Axios from 'axios';
 export default {
   data () {
     return {
-      bookLists: []
+      // bookLists: [],
+      bannerList: [],
+      topArtistsList: [],
+      topPlaylist: [],
+      topAlbumList: [],
+      djHotList: []
     }
   },
   computed: {
@@ -118,7 +84,54 @@ export default {
       return this.$store.state.bookLists;
     }
   },
+  created() {
+    this.banner()
+    this.topArtists()
+    this.topPlaylistHighquality()
+    this.topAlbum()
+    this.djHot()
+  },
   methods: {
+    banner() {
+      this.$api.banner({type: 2}).then(res => {
+        if(res.code === 200) {
+          // console.log(res)
+          this.bannerList = res.banners
+        }
+      })
+    },
+    topArtists() {
+      this.$api.topArtists({offset: 0, limit: 10}).then(res => {
+        if(res.code === 200) {
+          // console.log(res)
+          this.topArtistsList = res.artists
+        }
+      })
+    },
+    topPlaylistHighquality() {
+      this.$api.topPlaylistHighquality({limit: 10}).then(res => {
+        if(res.code === 200) {
+          // console.log(res)
+          this.topPlaylist = res.playlists
+        }
+      })
+    },
+    topAlbum() {
+      this.$api.topAlbum({offset: 0, limit: 10}).then(res => {
+        if(res.code === 200) {
+          // console.log(res)
+          this.topAlbumList = res.albums
+        }
+      })
+    },
+    djHot() {
+      this.$api.djHot({offset: 0, limit: 10}).then(res => {
+        if(res.code === 200) {
+          // console.log(res)
+          this.djHotList = res.djRadios
+        }
+      })
+    },
     // getDate () {
     //   var dataSource = 'https://www.easy-mock.com/mock/5ca45824c4e9a575b66b62c9/example/qingtingyingyu';
     //   Axios.get(dataSource).then((response) => {
@@ -181,14 +194,18 @@ export default {
 .update-box{
   padding-top: 10px;
   height: 145px;
-  background-color: rgba(131, 255, 127, 0.1);
+  /* background-color: rgba(131, 255, 127, 0.1); */
+  background-color: #1AF840;
+  margin-bottom: 35px;
 }
 .today-update{
   text-align: center;
   margin: 5px 0;
-  font-size: 10px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 3px;
+  color: #ffffff;
+  font-family: cursive;
 }
 .update{
   display: flex;
@@ -213,10 +230,10 @@ export default {
   width: 65px;
   display: block;
   margin-top: 10px;
-  font-size: 10px;
+  font-size: 13px;
   letter-spacing: 1px;
   line-height: 15px;
-  font-family: monospace;
+  /* font-family: monospace; */
   color: #666666;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -235,14 +252,14 @@ export default {
   line-height: 50px;
 }
 .sorts-box{
-  margin: 25px 10px 50px 10px;
+  margin: 10px;
 }
 .title-box{
   display: flex;
   justify-content: space-between;
 }
 .title{
-  font-size: 14px;
+  font-size: 18px;
   letter-spacing: 1px;
   font-family: cursive;
   font-weight: bold;
@@ -253,7 +270,7 @@ export default {
   position: relative;
   top: 3px;
   width: 8px;
-  height: 15px;
+  height: 18px;
   border-radius: 5px;
   margin-right: 5px;
   background-color: #1afa29;
@@ -261,14 +278,20 @@ export default {
 .more{
   font-size: 12px;
   letter-spacing: 1px;
-  color: #666666;
+  color: #1afa29;
 }
 .items{
   margin: 10px 8px;
   display: flex;
-  justify-content: space-between;
+  flex-wrap: nowrap;
+  /* justify-content: space-between; */
+  overflow-x: scroll;
+}
+.items::-webkit-scrollbar{
+  width: 0
 }
 .item{
+  margin-right: 23px;
   width: 110px;
   text-align: center;
 }
@@ -279,15 +302,21 @@ export default {
 }
 .item span{
   display: block;
-  width: 90px;
+  width: 100%;
   position: relative;
-  left: 10px;
+  /* left: 10px; */
+  text-align: left;
   font-size: 13px;
   letter-spacing: 1px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  color: #333333;
+}
+.top-album-name {
+  text-align: center !important;
+  -webkit-line-clamp: 2 !important;
 }
 </style>
