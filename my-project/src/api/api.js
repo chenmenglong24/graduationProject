@@ -67,9 +67,21 @@ export default {
   topArtists(params) {
     return dataGet('/top/artists', params)
   },
+  // 获取歌手单曲
+  artistSong(params) {
+    return dataGet('/artists', params)
+  },
   // 热门歌单
   topPlaylistHighquality(params) {
     return dataGet('/top/playlist/highquality', params)
+  },
+  // 歌单详情
+  playlistSong(params) {
+    return dataGet('/playlist/detail', params)
+  },
+  // 歌曲详情
+  songDetail(params) {
+    return dataGet('/song/detail', params)
   },
   // 新碟上架
   topAlbum(params) {
@@ -79,4 +91,8 @@ export default {
   djHot(params) {
     return dataGet('/dj/hot', params)
   },
+  // 榜单
+  topList(params) {
+    return dataGet('/top/list', params)
+  }
 }

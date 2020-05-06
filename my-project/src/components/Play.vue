@@ -15,7 +15,8 @@
         <img :src="cover" class="cover-img" alt="" id="cover" >
         <!-- 歌词 -->
         <div class="lyric" id="lyric" style="display:flex;" @click.stop="hideLyric">
-          <div v-html="playingSong.lyric" class="lyric-font"></div>
+          <div class="lyric-font" v-if="playingSong.lyric == undefined">暂无歌词</div>
+          <div v-html="playingSong.lyric" class="lyric-font" v-else></div>
         </div>
         <!-- 喜欢 -->
         <div class="like">
@@ -81,7 +82,7 @@ export default {
     console.log(this.playingSong)
     this.getCover()
     this.getLyric()
-    let index = this.$store.state.likeSongsList.indexOf(this.playingSong.id)
+    let index = this.$store.state.likeSongsIdList.indexOf(this.playingSong.id)
     if(index != -1) {
       this.like = true
     }
@@ -98,8 +99,10 @@ export default {
       } else {
         that.sizeStr = String(audio.duration/60 | 0) + ':' + String(audio.duration%60 | 0)
       }
-      console.log(that.size)
-      console.log(that.sizeStr)
+      // console.log(that.size)
+      // console.log(that.sizeStr)
+      that.$store.dispatch('savePlayHistory', that.playingSong.id)
+      // console.log(that.$store.state.playHistoryIdList)
     }
   },
   methods: {
@@ -171,7 +174,7 @@ export default {
         this.like = true
         this.$store.dispatch('addMyLike', id)
       }
-      console.log(this.$store.state.likeSongsList)
+      // console.log(this.$store.state.likeSongsList)
     },
     timeGoes(e) {
       this.currentTime = e.target.currentTime

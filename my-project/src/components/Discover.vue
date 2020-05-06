@@ -2,7 +2,7 @@
   <div>
     <div class="swipe-box">
       <mt-swipe :auto="3000">
-        <mt-swipe-item v-for="(item, index) in bannerList" :key="index" @click.native="toDetail(index)"><img :src="item.pic"/></mt-swipe-item>
+        <mt-swipe-item v-for="(item, index) in bannerList" :key="index"><img :src="item.pic"/></mt-swipe-item>
         <!-- <mt-swipe-item><img src="@/assets/swipe.jpg"/></mt-swipe-item>
         <mt-swipe-item><img src="@/assets/swipe.jpg"/></mt-swipe-item> -->
       </mt-swipe>
@@ -16,7 +16,7 @@
     <div class="update-box">
       <div class="today-update">— 热门歌手 —</div>
       <div class="update">
-        <div class="update-item" v-for="(item, index) in topArtistsList" :key="index" @click="toDetail(index)">
+        <div class="update-item" v-for="(item, index) in topArtistsList" :key="index" @click="toSingerDetail(item.id)">
           <img :src="item.picUrl"/>
           <span>{{item.name}}</span>
         </div>
@@ -32,7 +32,7 @@
       </div>
       <div class="items">
         <!-- <router-link to='/detail' tag="span" > -->
-          <div class="item" v-for="(item, index) in topPlaylist" :key="index" @click="toDetail(index)">
+          <div class="item" v-for="(item, index) in topPlaylist" :key="index" @click="toPlaylistDetail(item.id)">
             <img :src="item.coverImgUrl" />
             <span>{{item.name}}</span>
           </div>
@@ -45,7 +45,7 @@
         <span class="more">更多</span>
       </div>
       <div class="items">
-        <div class="item" v-for="(item, index) in topAlbumList" :key="index" @click="toDetail(index)">
+        <div class="item" v-for="(item, index) in topAlbumList" :key="index">
           <img :src="item.blurPicUrl" />
           <span class="top-album-name">{{item.name}}</span>
         </div>
@@ -57,7 +57,7 @@
         <span class="more">更多</span>
       </div>
       <div class="items">
-        <div class="item" v-for="(item, index) in djHotList" :key="index" @click="toDetail(index)">
+        <div class="item" v-for="(item, index) in djHotList" :key="index">
           <img :src="item.picUrl" />
           <span class="top-album-name">{{item.name+'('+item.rcmdtext+')'}}</span>
         </div>
@@ -141,11 +141,21 @@ export default {
     //     console.log(error);
     //   })
     // },
-    toDetail (index) {
+    toSingerDetail(id) {
       this.$router.push({
         path: '/detail',
         query: {
-          id: index
+          'type': 'singer',
+          'id': id
+        }
+      })
+    },
+    toPlaylistDetail(id) {
+      this.$router.push({
+        path: '/detail',
+        query: {
+          'type': 'playList',
+          'id': id
         }
       })
     }

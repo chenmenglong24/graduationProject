@@ -61,6 +61,13 @@ export default {
         '美剧', '英剧', '名人传记', '纪录片', '动画动漫', '脱口秀', '歌曲'
       ]
     }
+  },
+  created() {
+    this.$api.topList({idx: 1}).then(res => {
+      if(res.code === 200) {
+
+      }
+    })
   }
 }
 </script>
