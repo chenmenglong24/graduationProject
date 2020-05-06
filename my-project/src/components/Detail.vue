@@ -100,7 +100,6 @@ export default {
           let songIdList = res.privileges.map(item => {
             return item.id
           })
-          // console.log(songIdList)
           this.$api.songDetail({ids: songIdList.join(',')}).then(res => {
             if(res.code === 200) {
               this.songList = res.songs

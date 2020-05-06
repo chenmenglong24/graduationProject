@@ -8,6 +8,7 @@ import Home from '@/components/Home'
 import Search from '@/components/Search'
 import Play from '@/components/Play'
 import Detail from '@/components/Detail'
+import MVdetail from '@/components/MVdetail'
 
 Vue.use(Router)
 
@@ -55,6 +56,11 @@ export default new Router({
       path: '/detail',
       name: 'Detail',
       component: Detail
+    },
+    {
+      path: '/MVdetail',
+      name: 'MVdetail',
+      component: MVdetail
     }
   ]
 })

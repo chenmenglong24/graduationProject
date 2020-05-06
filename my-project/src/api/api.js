@@ -94,5 +94,13 @@ export default {
   // 榜单
   topList(params) {
     return dataGet('/top/list', params)
+  },
+  // mv排行
+  topMV(params) {
+    return dataGet('/top/mv', params)
+  },
+  // mv详情
+  MVdetail(params) {
+    return dataGet('/mv/detail', params)
   }
 }

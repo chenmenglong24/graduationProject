@@ -16,8 +16,8 @@
       <div class="navigation-bar">
         <router-link tag="span" class="navigate" :id="0" :class="{select:0==current}" @click.native="select" to="/my" >我的</router-link>
         <router-link tag="span" class="navigate" :id="1" :class="{select:1==current}" @click.native="select" to="/discover">发现</router-link>
-        <router-link tag="span" class="navigate" :id="2" :class="{select:2==current}" @click.native="select" to="/sort">分类</router-link>
-        <router-link tag="span" class="navigate" :id="3" :class="{select:3==current}" @click.native="select" to="/recommend">精品</router-link>
+        <router-link tag="span" class="navigate" :id="2" :class="{select:2==current}" @click.native="select" to="/sort">榜单</router-link>
+        <router-link tag="span" class="navigate" :id="3" :class="{select:3==current}" @click.native="select" to="/recommend">MV</router-link>
       </div>
     </div>
     <router-view/>
