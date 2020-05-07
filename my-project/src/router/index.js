@@ -23,44 +23,68 @@ export default new Router({
         {
           path: 'my',
           name: 'My',
-          component: My
+          component: My,
+          meta: {
+            title: '我的'
+          }
         },
         {
           path: 'discover',
           name: 'Discover',
-          component: Discover
+          component: Discover,
+          meta: {
+            title: '发现'
+          }
         },
         {
           path: 'sort',
           name: 'Sort',
-          component: Sort
+          component: Sort,
+          meta: {
+            title: '排行榜'
+          }
         },
         {
           path: 'recommend',
           name: 'Recommend',
-          component: Recommend
+          component: Recommend,
+          meta: {
+            title: '热门MV'
+          }
         }
       ]
     },
     {
       path: '/search',
       name: 'Search',
-      component: Search
+      component: Search,
+      meta: {
+        title: '搜索页面'
+      }
     },
     {
       path: '/play',
       name: 'Play',
-      component: Play
+      component: Play,
+      meta: {
+        title: '播放页面'
+      }
     },
     {
       path: '/detail',
       name: 'Detail',
-      component: Detail
+      component: Detail,
+      meta: {
+        title: '详情页'
+      }
     },
     {
       path: '/MVdetail',
       name: 'MVdetail',
-      component: MVdetail
+      component: MVdetail,
+      meta: {
+        title: 'MV页面'
+      }
     }
   ]
 })
