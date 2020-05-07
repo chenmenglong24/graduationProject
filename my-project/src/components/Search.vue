@@ -11,7 +11,7 @@
     <!-- 搜索结果 -->
     <div class="search-result" v-if="value.length">
       <ul>
-        <li v-for="(item, index) in searchResult" :key="index" class="music-list" @click="getMusicUrl(index)">
+        <li v-for="(item, index) in searchResult" :key="index" class="music-list" @click="toPlay(index)">
           <img class="musicNote-img" src="../assets/musicNote.png"/>
           <span>{{item.name}}</span>
         </li>
@@ -119,7 +119,7 @@ export default {
           })
       }
     },
-    getMusicUrl(index) {
+    toPlay(index) {
       this.$store.dispatch('playingSong', this.searchResult[index])
       this.$store.dispatch('playingSongList', this.searchResult)
       this.$router.push('/Play')
