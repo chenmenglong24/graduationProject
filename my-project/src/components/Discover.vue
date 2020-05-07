@@ -3,8 +3,6 @@
     <div class="swipe-box">
       <mt-swipe :auto="3000">
         <mt-swipe-item v-for="(item, index) in bannerList" :key="index"><img :src="item.pic"/></mt-swipe-item>
-        <!-- <mt-swipe-item><img src="@/assets/swipe.jpg"/></mt-swipe-item>
-        <mt-swipe-item><img src="@/assets/swipe.jpg"/></mt-swipe-item> -->
       </mt-swipe>
     </div>
     <div class="icon-box">
@@ -31,12 +29,10 @@
         <span class="more">更多</span>
       </div>
       <div class="items">
-        <!-- <router-link to='/detail' tag="span" > -->
-          <div class="item" v-for="(item, index) in topPlaylist" :key="index" @click="toPlaylistDetail(item.id)">
-            <img :src="item.coverImgUrl" />
-            <span>{{item.name}}</span>
-          </div>
-        <!-- </router-link> -->
+        <div class="item" v-for="(item, index) in topPlaylist" :key="index" @click="toPlaylistDetail(item.id)">
+          <img :src="item.coverImgUrl" />
+          <span>{{item.name}}</span>
+        </div>
       </div>
     </div>
     <div class="sorts-box">
@@ -71,17 +67,11 @@ import Axios from 'axios';
 export default {
   data () {
     return {
-      // bookLists: [],
       bannerList: [],
       topArtistsList: [],
       topPlaylist: [],
       topAlbumList: [],
       djHotList: []
-    }
-  },
-  computed: {
-    dataSrc () {      
-      return this.$store.state.bookLists;
     }
   },
   created() {
@@ -95,7 +85,6 @@ export default {
     banner() {
       this.$api.banner({type: 2}).then(res => {
         if(res.code === 200) {
-          // console.log(res)
           this.bannerList = res.banners
         }
       })
@@ -103,7 +92,6 @@ export default {
     topArtists() {
       this.$api.topArtists({offset: 0, limit: 10}).then(res => {
         if(res.code === 200) {
-          // console.log(res)
           this.topArtistsList = res.artists
         }
       })
@@ -111,7 +99,6 @@ export default {
     topPlaylistHighquality() {
       this.$api.topPlaylistHighquality({limit: 10}).then(res => {
         if(res.code === 200) {
-          // console.log(res)
           this.topPlaylist = res.playlists
         }
       })
@@ -119,7 +106,6 @@ export default {
     topAlbum() {
       this.$api.topAlbum({offset: 0, limit: 10}).then(res => {
         if(res.code === 200) {
-          // console.log(res)
           this.topAlbumList = res.albums
         }
       })
@@ -127,20 +113,10 @@ export default {
     djHot() {
       this.$api.djHot({offset: 0, limit: 10}).then(res => {
         if(res.code === 200) {
-          // console.log(res)
           this.djHotList = res.djRadios
         }
       })
     },
-    // getDate () {
-    //   var dataSource = 'https://www.easy-mock.com/mock/5ca45824c4e9a575b66b62c9/example/qingtingyingyu';
-    //   Axios.get(dataSource).then((response) => {
-    //     // console.log(response);
-    //     this.swipeList = response.data.data;
-    //   }).catch((error) => {
-    //     console.log(error);
-    //   })
-    // },
     toSingerDetail(id) {
       this.$router.push({
         path: '/detail',
@@ -159,13 +135,6 @@ export default {
         }
       })
     }
-  },
-  mounted () {
-    // this.getDate();
-    // this.bookLists = this.$store.state.bookLists[0];
-    // console.log(1);
-    // console.log(this.bookLists);
-    // console.log(this.$store.state.bookLists);
   }
 }
 </script>

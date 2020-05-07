@@ -9,7 +9,6 @@
         </div>
         <div style="padding-top: 10px; color: #ffffff; text-shadow:1px 5px 24px #000">
           <span>作者:</span>
-          <!-- <span v-for="(name, index) in playingSong.artists" :key="index">{{name}}</span> -->
           <span>{{playingSong.artists.join('/')}}</span>
         </div>
         <img :src="cover" class="cover-img" alt="" id="cover" >
@@ -38,6 +37,7 @@
           <span class="size">{{sizeStr}}</span>
         </div>
       </div>
+      <!-- 控件 -->
       <div class="play-bar">
         <div class="audio-box">
           <div class="pre" @click="preSong">

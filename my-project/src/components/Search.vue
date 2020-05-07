@@ -120,29 +120,9 @@ export default {
       }
     },
     getMusicUrl(index) {
-      // let songId = this.searchResult[index].id
-      // let albumId = this.searchResult[index].album.id
-      // let artists = this.searchResult[index].artists
-      // let artistsArr = artists.map(item => {
-        // return item.name
-      // })
-      // let songName = this.searchResult[index].name
-      // this.$api.musicUrl({id: songId}).then(res => {
-        // if(res.code === 200) {
-          // let songInfo = {
-          //   'albumId': albumId,
-          //   'artists': artistsArr,
-          //   'songName': songName
-          // }
-          // songInfo = Object.assign(songInfo, res.data[0])
-          // this.$store.dispatch('playingSong', songInfo)
-          this.$store.dispatch('playingSong', this.searchResult[index])
-          // console.log('当前播放歌曲:', this.$store.state.playingSong)
-          this.$store.dispatch('playingSongList', this.searchResult)
-          // console.log('当前播放列表:', this.$store.state.playingSongList)
-          this.$router.push('/Play')
-        // }
-      // })
+      this.$store.dispatch('playingSong', this.searchResult[index])
+      this.$store.dispatch('playingSongList', this.searchResult)
+      this.$router.push('/Play')
     },
     hotKeySearch(index) {
       this.value = this.hotKeys[index].first

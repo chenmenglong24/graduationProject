@@ -34,31 +34,9 @@
                 <li v-for="(tag, index) in item.tags" :key="index">· {{tag}}</li>
               </ul>
             </div>
-            <!-- <div class="delete" @click="delMySubscribe(index)" @click.stop="">x</div> -->
           </div>
         </div>
       </div>
-      <!-- <div class="items">
-        <div class="items-title">我的下载</div>
-        <div class="recommend">
-          <div class="recommend-img">
-            <img src="../assets/swipe.jpg">
-          </div>
-          <div class="introduce">
-            <div class="title">意趣英语</div>
-            <div class="desc">深度美剧讲解，自然法口语学习</div>
-            <div class="label">
-              <ul>
-                <li>· 美剧</li>
-                <li>· 口语</li>
-                <li>· 商务英语</li>
-                <li>· 发音</li>
-              </ul>
-            </div>
-            <div class="delete">x</div>
-          </div>
-        </div>
-      </div> -->
       <div class="items">
         <div class="items-title">播放历史</div>
         <div class="null" v-if="!playHistoryList.length">暂无播放历史哦~</div>

@@ -30,7 +30,6 @@ import Sidebar from './Sidebar'
 export default {
   data () {
     return {
-      // msg: '我是首页的头部',
       cover: false,
       current: '1'
     }
@@ -49,7 +48,6 @@ export default {
       this.$refs.showside.hide = true
     },
     select (e) {
-      // console.log(e.target.id);
       this.current = e.target.id;
       localStorage.setItem('current', this.current);
     }
