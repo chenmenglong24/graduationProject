@@ -120,36 +120,29 @@ export default {
       }
     },
     getMusicUrl(index) {
-      let songId = this.searchResult[index].id
-      // let songCover = this.searchResult[index].album.artist.img1v1Url
-      let albumId = this.searchResult[index].album.id
-      let artists = this.searchResult[index].artists
-      let artistsArr = artists.map(item => {
-        return item.name
-      })
-      let songName = this.searchResult[index].name
-      this.$api.musicUrl({id: songId}).then(res => {
-        if(res.code === 200) {
-          // let songInfo = Object.assign({}, {'cover': songCover}, {'artists': artistsArr}, {'songName': songName}, res.data[0])
-          let songInfo = {
-            // 'cover': songCover,
-            'albumId': albumId,
-            'artists': artistsArr,
-            'songName': songName
-          }
-          songInfo = Object.assign(songInfo, res.data[0])
-          this.$store.dispatch('playingSong', songInfo)
-          // 获取歌词
-          // this.$api.musicLyric({id: songId}).then(res => {
-          //   if(res.code === 200) {
-          //     songInfo = Object.assign(songInfo, {'lyric': res.lrc.lyric})
-          //     this.$store.dispatch('playingSong', songInfo)
-          //   }
-          // })
-          // console.log(this.$store.state.playingSong)
+      // let songId = this.searchResult[index].id
+      // let albumId = this.searchResult[index].album.id
+      // let artists = this.searchResult[index].artists
+      // let artistsArr = artists.map(item => {
+        // return item.name
+      // })
+      // let songName = this.searchResult[index].name
+      // this.$api.musicUrl({id: songId}).then(res => {
+        // if(res.code === 200) {
+          // let songInfo = {
+          //   'albumId': albumId,
+          //   'artists': artistsArr,
+          //   'songName': songName
+          // }
+          // songInfo = Object.assign(songInfo, res.data[0])
+          // this.$store.dispatch('playingSong', songInfo)
+          this.$store.dispatch('playingSong', this.searchResult[index])
+          // console.log('当前播放歌曲:', this.$store.state.playingSong)
+          this.$store.dispatch('playingSongList', this.searchResult)
+          // console.log('当前播放列表:', this.$store.state.playingSongList)
           this.$router.push('/Play')
-        }
-      })
+        // }
+      // })
     },
     hotKeySearch(index) {
       this.value = this.hotKeys[index].first
@@ -293,7 +286,7 @@ export default {
   height: 40px;
   line-height: 45px;
   /* background-color: #eeeeee; */
-  background-color: #cccccc;
+  background-color: #666666;
   color: #ffffff;
   overflow: hidden;
   text-overflow: ellipsis;

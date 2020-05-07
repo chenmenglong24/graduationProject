@@ -12,7 +12,7 @@
         <div class="null" v-if="!likeSongsList.length">暂无喜欢哦~</div>
         <div class="search-result">
           <ul>
-            <li v-for="(item, index) in likeSongsList" :key="index" class="music-list" @click="getMusicUrl(item)">
+            <li v-for="(item, index) in likeSongsList" :key="index" class="music-list" @click="likeToPlay(item)">
               <img class="musicNote-img" src="../assets/musicNote.png"/>
               <span>{{item.name}}</span>
             </li>
@@ -64,7 +64,7 @@
         <div class="null" v-if="!playHistoryList.length">暂无播放历史哦~</div>
         <div class="search-result">
           <ul>
-            <li v-for="(item, index) in playHistoryList" :key="index" class="music-list" @click="getMusicUrl(item)">
+            <li v-for="(item, index) in playHistoryList" :key="index" class="music-list" @click="HistoryToPlay(item)">
               <img class="musicNote-img" src="../assets/musicNote.png"/>
               <span>{{item.name}}</span>
             </li>
@@ -89,9 +89,11 @@ export default {
     let likeSongsIdList = this.$store.state.likeSongsIdList
     let likeGDIdList = this.$store.state.likeGDIdList
     let playHistoryIdList = this.$store.state.playHistoryIdList
-    // console.log(likeSongsIdList)
-    // console.log(likeGDIdList)
-    console.log(playHistoryIdList)
+
+    console.log('喜欢列表:', likeSongsIdList)
+    console.log('歌单列表:', likeGDIdList)
+    console.log('历史记录:', playHistoryIdList)
+
     if(likeSongsIdList.length > 0) {
       this.likeSongs(likeSongsIdList)
     }
@@ -133,31 +135,16 @@ export default {
         }
       })
     },
-    getMusicUrl(item) {
-      let songId = item.id
-      let albumId = item.al.id
-      let artists = item.ar
-      let artistsArr = artists.map(element => {
-        return element.name
-      })
-      let songName = item.name
-      this.$api.musicUrl({id: songId}).then(res => {
-        if(res.code === 200) {
-          let songInfo = {
-            // 'cover': songCover,
-            'albumId': albumId,
-            'artists': artistsArr,
-            'songName': songName
-          }
-          songInfo = Object.assign(songInfo, res.data[0])
-          this.$store.dispatch('playingSong', songInfo)
-          this.$router.push('/Play')
-        }
-      })
+    likeToPlay(item) {
+      this.$store.dispatch('playingSong', item)
+      this.$store.dispatch('playingSongList', this.likeSongsList)
+      this.$router.push('/Play')
     },
-    // delMySubscribe (index) {
-    //   this.$store.dispatch('delMySubscribe', index);
-    // },
+    HistoryToPlay(item) {
+      this.$store.dispatch('playingSong', item)
+      this.$store.dispatch('playingSongList', this.playHistoryList)
+      this.$router.push('/Play')
+    },
     toPlaylistDetail(id) {
       this.$router.push({
         path: '/detail',

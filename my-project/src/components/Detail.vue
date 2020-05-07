@@ -36,7 +36,7 @@
     <!-- 歌曲 -->
     <div class="search-result">
       <ul>
-        <li v-for="(item, index) in songList" :key="index" class="music-list" @click="getMusicUrl(item)">
+        <li v-for="(item, index) in songList" :key="index" class="music-list" @click="toPlay(item)">
           <img class="musicNote-img" src="../assets/musicNote.png"/>
           <span>{{item.name}}</span>
         </li>
@@ -46,30 +46,20 @@
 </template>
 
 <script>
-// import Axios from 'axios';
-// import { mapGetters } from 'vuex';
 export default {
   data () {
     return {
       isSubscribe: false,
       collect: false,
       isDownload: false,
-      // currentItem: {}
       type: '',
       id: '',
       detailInfo: {},
       songList: []
     }  
   },
-  // computed: {
-  //   currentItem () {
-  //     var id =  this.$route.query.id;
-  //     this.isSubscribe = this.$store.state.bookLists[id].isSubscribe;
-  //     return this.$store.state.bookLists[id];
-  //   }
-  // },
   created() {
-    // console.log(this.$route)
+    console.log(this.$route)
     this.type = this.$route.query.type
     let id = this.$route.query.id
     this.id = id
@@ -79,7 +69,7 @@ export default {
     if(this.type === 'playList') {
       this.playlistSong(id)
     }
-    let index = this.$store.state.likeGDIdList.indexOf(id)
+    let index = this.$store.state.likeGDIdList.indexOf(String(id))
     if(index != -1) {
       this.collect = true
     }
@@ -90,6 +80,7 @@ export default {
         if(res.code === 200) {
           this.detailInfo = res.artist
           this.songList = res.hotSongs
+          console.log('歌手:', res.artist.name)
         }
       })
     },
@@ -108,44 +99,25 @@ export default {
         }
       })
     },
-    getMusicUrl(item) {
-      let songId = item.id
-      let albumId = item.al.id
-      let artists = item.ar
-      let artistsArr = artists.map(element => {
-        return element.name
-      })
-      let songName = item.name
-      this.$api.musicUrl({id: songId}).then(res => {
-        if(res.code === 200) {
-          let songInfo = {
-            // 'cover': songCover,
-            'albumId': albumId,
-            'artists': artistsArr,
-            'songName': songName
-          }
-          songInfo = Object.assign(songInfo, res.data[0])
-          this.$store.dispatch('playingSong', songInfo)
-          this.$router.push('/Play')
-        }
-      })
+    toPlay(item) {
+      this.$store.dispatch('playingSong', item)
+      this.$store.dispatch('playingSongList', this.songList)
+      this.$router.push('/Play')
     },
     back () {
       this.$router.go(-1);
     },
-    subscribe () {
-      let id = this.$route.query.id;
-      this.$store.dispatch('addMySubscribe', id);
-      this.isSubscribe = true;
+    share() {
+      
     },
     doCollect () {
       let id = this.id
       if(this.collect) {
         this.collect = false
-        this.$store.dispatch('delMyLikeGD', id)
+        this.$store.dispatch('delMyLikeGD', String(id))
       } else {
         this.collect = true
-        this.$store.dispatch('addMyLikeGD', id)
+        this.$store.dispatch('addMyLikeGD', String(id))
       }
       console.log(this.$store.state.likeGDIdList)
     },

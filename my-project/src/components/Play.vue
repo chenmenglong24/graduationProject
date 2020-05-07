@@ -5,7 +5,7 @@
       <div class="cover" @click="showLyric">
         <div style="padding-top: 20px; color: #ffffff; text-shadow:1px 5px 24px #000">
           <span>歌曲:</span>
-          <span>{{playingSong.songName}}</span>
+          <span>{{playingSong.name}}</span>
         </div>
         <div style="padding-top: 10px; color: #ffffff; text-shadow:1px 5px 24px #000">
           <span>作者:</span>
@@ -40,7 +40,7 @@
       </div>
       <div class="play-bar">
         <div class="audio-box">
-          <div class="pre">
+          <div class="pre" @click="preSong">
             <img src="../assets/pre.png" alt="">
           </div>
           <div class="switch-box">
@@ -49,10 +49,12 @@
               :src="playingSong.url" 
               @timeupdate="timeGoes"
               @ended="songEnd"
+              autoplay
+              loop
               >
             </audio>
           </div>
-          <div class="next">
+          <div class="next" @click="nextSong">
             <img src="../assets/next.png" alt="">
           </div>
         </div>
@@ -69,6 +71,8 @@ export default {
       see: true,
       play: true,
       playingSong: {},
+      albumId: '',
+      artists: [],
       cover: '',
       currentTime: '0.00',
       sizeStr: '0.00',
@@ -78,53 +82,82 @@ export default {
     }
   },
   created() {
-    this.playingSong = this.$store.state.playingSong
-    console.log(this.playingSong)
-    this.getCover()
-    this.getLyric()
+    console.log('首次播放歌曲:', this.$store.state.playingSong)
+    console.log('当前播放列表:', this.$store.state.playingSongList)
+
+    let playingSong = Object.assign({}, this.$store.state.playingSong)
+    this.playingSong = playingSong
+    let songId = playingSong.id
+
+    if(playingSong.album) {
+      this.albumId = playingSong.album.id
+      this.artists = playingSong.artists
+    }
+    if(playingSong.al) {
+      this.albumId = playingSong.al.id
+      this.artists = playingSong.ar
+    }
+    this.playingSong.artists = this.artists.map(item => {
+      return item.name
+    })
+
+    this.getMusicUrl(songId)
+    this.getCover(this.albumId)
+    this.getLyric(songId)
     let index = this.$store.state.likeSongsIdList.indexOf(this.playingSong.id)
     if(index != -1) {
       this.like = true
+    } else {
+      this.like = false
     }
   },
   mounted() {
-    let that = this
-    let audio = document.getElementById('audio')
-    audio.play()
-    console.log('页面加载进来时audio.paused：', audio.paused)
-    audio.oncanplay = function () {
-      that.size = audio.duration
-      if(String(audio.duration%60 | 0).length === 1) {
-        that.sizeStr = String(audio.duration/60 | 0) + ':' + '0' + String(audio.duration%60 | 0)
-      } else {
-        that.sizeStr = String(audio.duration/60 | 0) + ':' + String(audio.duration%60 | 0)
-      }
-      // console.log(that.size)
-      // console.log(that.sizeStr)
-      that.$store.dispatch('savePlayHistory', that.playingSong.id)
-      // console.log(that.$store.state.playHistoryIdList)
-    }
+    this.initPLaying()
   },
+  // updated() {
+  //   console.log('播放页面数据更新了--------')
+  // },
   methods: {
-    back() {
-      this.$router.go(-1);
-      // let playPage = document.getElementById('playPage')
-      // playPage.style.display = 'none'
+    initPLaying() {
+      let that = this
+      let audio = document.getElementById('audio')
+      audio.play()
+      // console.log('页面加载进来时audio.paused：', audio.paused)
+      audio.oncanplay = function () {
+        that.size = audio.duration
+        if(String(audio.duration%60 | 0).length === 1) {
+          that.sizeStr = String(audio.duration/60 | 0) + ':' + '0' + String(audio.duration%60 | 0)
+        } else {
+          that.sizeStr = String(audio.duration/60 | 0) + ':' + String(audio.duration%60 | 0)
+        }
+        console.log('当前歌曲:'+that.playingSong.name+'---大小:'+that.size+'-转换成分秒:'+that.sizeStr)
+        that.$store.dispatch('savePlayHistory', that.playingSong.id)
+      }
     },
-    getCover() {
-      this.$api.album({id: this.playingSong.albumId}).then(res => {
+    back() {
+      this.$router.go(-1)
+    },
+    getMusicUrl(songId) {
+      this.$api.musicUrl({id: songId}).then(res => {
+        if(res.code === 200) {
+          this.playingSong.url = res.data[0].url
+        }
+      })
+    },
+    getCover(albumId) {
+      this.$api.album({id: albumId}).then(res => {
         if(res.code === 200) {
           this.cover = res.album.blurPicUrl
         } 
       })
     },
-    getLyric() {
-      this.$api.musicLyric({id: this.playingSong.id}).then(res => {
+    getLyric(songId) {
+      this.$api.musicLyric({id: songId}).then(res => {
         if(res.code === 200) {
-          // songInfo = Object.assign(songInfo, {'lyric': res.lrc.lyric})
-          // this.$store.dispatch('playingSong', songInfo)
-          this.lyric = res.lrc.lyric
-          this.formatLyric(this.lyric)
+          if(!res.nolyric) {
+            this.lyric = res.lrc.lyric
+            this.formatLyric(this.lyric)
+          }
         }
       })
     },
@@ -142,7 +175,6 @@ export default {
           flag = true
         }
       }
-      // console.log(lyricArr.join(''))
       this.playingSong.lyric = lyricArr.join('').replace(/\n/g,"<br/>")
     },
     show () {
@@ -150,7 +182,6 @@ export default {
     },
     hideLyric() {
       let lyricBox = document.getElementById('lyric')
-      // console.log(lyricBox.style.zIndex)
       lyric.style.zIndex = -1
     },
     showLyric() {
@@ -158,12 +189,10 @@ export default {
       lyric.style.zIndex = 99
     },
     format(seconds) {
-      // if(seconds < this.size) {
-        let minute = Number(seconds)/60 | 0
-        let second = Number(seconds)%60 | 0
-        let sec = second < 10 ? '0' + second : second
-        return `${minute}:${sec}`
-      // }
+      let minute = Number(seconds)/60 | 0
+      let second = Number(seconds)%60 | 0
+      let sec = second < 10 ? '0' + second : second
+      return `${minute}:${sec}`
     },
     doLike() {
       let id = this.playingSong.id
@@ -174,7 +203,6 @@ export default {
         this.like = true
         this.$store.dispatch('addMyLike', id)
       }
-      // console.log(this.$store.state.likeSongsList)
     },
     timeGoes(e) {
       this.currentTime = e.target.currentTime
@@ -191,21 +219,78 @@ export default {
       let cover = document.getElementById('cover')
       let playBtn = this.$refs.playBtn
       if (audio.paused) {
-        audio.play();
-        console.log('点击播放按钮时audio.paused：',audio.paused)
+        audio.play()
+        // console.log('点击播放按钮时audio.paused：',audio.paused)
         this.play = true
         playBtn.src = "/static/play.png"
         cover.style=cover.style.cssText+"animation-play-state: running;"
 
       } else {
-        audio.pause();
-        console.log('点击暂停按钮时audio.paused：',audio.paused)
+        audio.pause()
+        // console.log('点击暂停按钮时audio.paused：',audio.paused)
         this.play = false
         playBtn.src = "/static/pause.png"
         cover.style=cover.style.cssText+"animation-play-state: paused;"
       }
     },
-    
+    preSong() {
+      let playingSongList = [].concat(JSON.parse(JSON.stringify(this.$store.state.playingSongList)))
+      let idList = playingSongList.map(item => item.id)
+      let sort = idList.indexOf(this.playingSong.id)
+      this.playingSong = playingSongList[sort - 1]
+
+      if(this.playingSong.album) {
+      this.albumId = this.playingSong.album.id
+      this.artists = this.playingSong.artists
+      }
+      if(this.playingSong.al) {
+        this.albumId = this.playingSong.al.id
+        this.artists = this.playingSong.ar
+      }
+      this.playingSong.artists = this.artists.map(item => {
+        return item.name
+      })
+      
+      this.getMusicUrl(this.playingSong.id)
+      this.getCover(this.albumId)
+      this.getLyric(this.playingSong.id)
+      let index = this.$store.state.likeSongsIdList.indexOf(this.playingSong.id)
+      if(index != -1) {
+        this.like = true
+      } else {
+        this.like = false
+      }
+      this.initPLaying()
+    },
+    nextSong() {
+      let playingSongList = [].concat(JSON.parse(JSON.stringify(this.$store.state.playingSongList)))
+      let idList = playingSongList.map(item => item.id)
+      let sort = idList.indexOf(this.playingSong.id)
+      this.playingSong = playingSongList[sort + 1]
+
+      if(this.playingSong.album) {
+      this.albumId = this.playingSong.album.id
+      this.artists = this.playingSong.artists
+      }
+      if(this.playingSong.al) {
+        this.albumId = this.playingSong.al.id
+        this.artists = this.playingSong.ar
+      }
+      this.playingSong.artists = this.artists.map(item => {
+        return item.name
+      })
+
+      this.getMusicUrl(this.playingSong.id)
+      this.getCover(this.albumId)
+      this.getLyric(this.playingSong.id)
+      let index = this.$store.state.likeSongsIdList.indexOf(this.playingSong.id)
+      if(index != -1) {
+        this.like = true
+      } else {
+        this.like = false
+      }
+      this.initPLaying()
+    }
   }
 }
 </script>

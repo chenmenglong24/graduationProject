@@ -6,12 +6,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // bookLists: data,
     searchHistory: [],
-    // mySubscribe: [],
-    // myCollect: [],
-    // myDownload: [],
     playingSong: {},
+    playingSongList: [],
     likeSongsIdList: [],
     likeGDIdList: [],
     playHistoryIdList: []
@@ -26,14 +23,11 @@ export default new Vuex.Store({
     deleteAllHistory ({ commit }) {
       commit('DeleteAllHistory')
     },
-    // addMySubscribe ({ commit }, id) {
-    //   commit('AddMySubscribe', id)
-    // },
-    // delMySubscribe ({ commit }, index) {
-    //   commit('DelMySubscribe', index)
-    // },
     playingSong ({ commit }, song) {
       commit('PlayingSong', song)
+    },
+    playingSongList ({ commit }, songList) {
+      commit('PlayingSongList', songList)
     },
     addMyLike ({ commit }, id) {
       commit('AddMyLike', id)
@@ -66,32 +60,11 @@ export default new Vuex.Store({
     DeleteAllHistory (state) {
       state.searchHistory.splice(0);
     },
-    // AddMySubscribe (state, id) {
-    //   // state.isSubscribe = true;
-
-    //   let exist = state.mySubscribe.some((item) => {
-    //     return id == item.id
-    //   })
-
-    //   if (exist) {
-    //     // console.log(state.mySubscribe);
-    //     return
-    //   } else {
-    //     let item = state.bookLists[id];
-    //     state.mySubscribe.push(item);
-    //     item.isSubscribe = true;
-    //     console.log(item);
-    //   }
-    // },
-    // DelMySubscribe (state, index) {
-    //   let id = state.mySubscribe[index].id;
-    //   let item = state.bookLists[id];
-    //   item.isSubscribe = false;
-    //   console.log(item)
-    //   state.mySubscribe.splice(index, 1);
-    // },
     PlayingSong (state, song) {
       state.playingSong = song
+    },
+    PlayingSongList (state, songList) {
+      state.playingSongList = songList
     },
     AddMyLike(state, id) {
       state.likeSongsIdList.unshift(id)
