@@ -15,7 +15,7 @@
         <div class="desc">{{MVinfo.desc}}</div>
       </div>
     </div>
-    <div style="height: 50px;"></div>
+    <!-- <div style="height: 50px;"></div> -->
   </div>
 </template>
 
@@ -55,6 +55,8 @@ export default {
 .desc-box{
   padding: 15px 10px;
   background-color: #666666;
+  overflow-y: scroll;
+  height: 420px;
 }
 .title{
   font-size: 20px;
@@ -62,7 +64,7 @@ export default {
 }
 .desc{
   margin-top: 10px;
-  height: 450px;
+  /* height: 450px; */
   color: #bbbbbb;
 }
 </style>

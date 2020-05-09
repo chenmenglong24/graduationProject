@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <router-view/>
-    <router-link tag="span" to="/play" v-if="$route.name != 'Play'">
-      <v-footbar></v-footbar>
-    </router-link>
+    <!-- <router-link tag="span" to="/play" v-if="$route.name != 'Play'"> -->
+      <!-- <v-footbar></v-footbar> -->
+    <!-- </router-link> -->
     <!-- <play></play> -->
   </div>
 </template>
